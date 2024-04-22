@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estyle_novo.css">
+
+    <title>VIX - Cadastro de Veículo</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="imagem-logo">
+                <a href="control_panel.html">
+                    <img src="imagem/VIX_logo.png" alt="logo VIX">
+                </a>
+            </div>
+            <div class="list-menu">
+                <ul>
+                    <li><a href="control_panel.html"><img src="imagem/panel.png"> Painel de Controle</a></li>
+                    <li><a href="new_route.html"><img src="imagem/new.png"> Nova Rota</a></li>
+                    <li><a href="driver_registration.html"><img src="imagem/driver.png"> Cadastro de Motorista</a></li>
+                    <li><a href="vehicle_registration.html"><img src="imagem/truck.png"> Cadastro de Veiculo</a></li>
+                    <li><a href="user_registration.html"><img src="imagem/user2.png"> Cadastro de Usuário</a></li>
+                </ul>
+            </div>
+            <button id="logoutButton" class="logout-button">Sair</a></button>
+        </nav>
+        <main class="content">
+            <div class="header">
+                <h1>Cadastro de Veículos</h1>
+            </div>
+            <div class="cars">
+
+                <form id="registrationForm" method="post">
+                    <div class="cars1">
+                        <div class="cars1a">
+                            <label for="placa">Placa:</label>
+                            <input type="text" id="placa" name="placa" maxlength="8" required><br>
+                        </div>
+                        <div class="cars1b">
+                            <label for="modelo">Modelo:</label>
+                            <input type="text" id="modelo" name="modelo" maxlength="50" required><br>
+                        </div>
+                    </div>
+
+                    <div class="cars2">
+                        <label for="cor">Cor:</label>
+                        <input type="text" id="cor" name="cor" maxlength="10" required><br>
+                    </div>
+
+                    <div class="cars1">
+                        <div class="cars1a">
+                            <label for="anoFabricacao">Ano de Fabricação:</label>
+                            <input type="number" id="anoFabricacao" name="anoFabricacao" required><br>
+                        </div>
+                        <div class="cars1b">
+                            <label for="anoModelo">Ano do Modelo:</label>
+                            <input type="number" id="anoModelo" name="anoModelo" required><br>
+                        </div>
+                    </div>
+
+                    <div class="cars2">
+                        <label for="renavan">Renavan:</label>
+                        <input type="text" id="renavan" name="renavan" maxlength="20" required><br>
+                    </div>
+                    <div class="cars3">
+                        <div class="cars3a">
+                            <label for="tipoVeiculo">Tipo de Veículo:</label>
+                            <select id="tipoVeiculo" name="tipoVeiculo"><br>
+                                <option value=""></option>
+                                <option value="PASSEIO">PASSEIO</option>
+                                <option value="FIORINO">FIORINO</option>
+                                <option value="VUC">VUC</option>
+                                <option value="3/4">3/4</option>
+                                <option value="TRUCK">TRUCK</option>
+                                <option value="CARRETA">CARRETA</option>
+
+                            </select>
+                        </div>
+                        <div class="cars3b">
+                            <label for="validadeLicenciamento">Validade do Licenciamento:</label>
+                            <select id="validadeLicenciamento" name="validadeLicenciamento" required>><br>
+                                <option value=""></option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+
+
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="button-register">
+                        <button id="button-register" type="submit">Cadastrar</button>
+                    </div>
+                    <div id="responseMessage" style="margin-top: 20px;"></div> <!-- Movido para abaixo do botão -->
+
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+                    <script>
+                        $(document).ready(function () {
+                            $('#button-register').click(function () {
+                                submitForm();
+                            });
+                        });
+
+                        function submitForm() {
+                            var placa = $('#placa').val();
+                            var modelo = $('#modelo').val();
+                            var cor = $('#cor').val();
+                            var anoFabricacao = $('#anoFabricacao').val();
+                            var anoModelo = $('#anoModelo').val();
+                            var renavan = $('#renavan').val();
+                            var tipoVeiculo = $('#tipoVeiculo').val();
+                            var validadeLicenciamento = $('#validadeLicenciamento').val();
+
+                            $.ajax({
+                                type: 'POST',
+                                url: 'http://localhost/crud.projetoweb/php/gravarvehicle.php',
+                                data: {
+                                    placa: placa,
+                                    modelo: modelo,
+                                    cor: cor,
+                                    anoFabricacao: anoFabricacao,
+                                    anoModelo: anoModelo,
+                                    renavan: renavan,
+                                    tipoVeiculo: tipoVeiculo,
+                                    validadeLicenciamento: validadeLicenciamento
+                                },
+                                success: function (response) {
+                                    console.log(response); // Verificar resposta no console
+
+                                    $('#responseMessage').text(response);
+
+                                    if (response.trim() === "Veículo cadastrado com sucesso") {
+                                        $('#placa').val('');
+                                        $('#modelo').val('');
+                                        $('#cor').val('');
+                                        $('#anoFabricacao').val('');
+                                        $('#anoModelo').val('');
+                                        $('#renavan').val('');
+                                        $('#tipoVeiculo').val('');
+                                        $('#validadeLicenciamento').val('');
+                                        $('#responseMessage').css('color', 'green');
+                                    } else {
+                                        $('#responseMessage').css('color', 'red');
+                                    }
+                                },
+                                error: function () {
+                                    $('#responseMessage').text('Erro ao processar requisição.').css('color', 'red');
+                                }
+                            });
+                        }
+                    </script>
+                </form>
+
+            </div>
+        </main>
+    </div>
+    <script>
+        fetch('php/verificar_sessao.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    // Redireciona para a página de login se o usuário não estiver autenticado
+                    window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar a sessão:', error);
+            });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Seu código JavaScript existente
+
+            // Adiciona um evento de clique ao botão de logout
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                // Faz uma solicitação ao servidor para encerrar a sessão PHP
+                fetch('php/logout.php', {
+                    method: 'POST',
+                })
+                    .then(function (response) {
+                        // Redireciona para a página de login após logout
+                        window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                    })
+                    .catch(function (error) {
+                        console.error('Erro ao efetuar logout:', error);
+                    });
+            });
+
+            // Seu código JavaScript existente
+        });
+    </script>
+</body>
+<footer>
+    <div class="footer-text">
+        <h4>© Copyright <u>VIX EXPRESS</u> All Rights Reserved</h4>
+        <p>
+        <h5>Designed by DANILO MACEDO.</h5>
+        </p>
+    </div>
+</footer>
+
+</html>

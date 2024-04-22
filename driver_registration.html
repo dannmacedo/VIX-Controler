@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estyle_novo.css">
+
+
+
+    <title>VIX - Cadastro de Motorista</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="imagem-logo">
+                <a href="control_panel.html">
+                    <img src="imagem/VIX_logo.png" alt="logo VIX">
+                </a>
+            </div>
+            <div class="list-menu">
+                <ul>
+                    <li><a href="control_panel.html"><img src="imagem/panel.png"> Painel de Controle</a></li>
+                    <li><a href="new_route.html"><img src="imagem/new.png"> Nova Rota</a></li>
+                    <li><a href="driver_registration.html"><img src="imagem/driver.png"> Cadastro de Motorista</a></li>
+                    <li><a href="vehicle_registration.html"><img src="imagem/truck.png"> Cadastro de Veiculo</a></li>
+                    <li><a href="user_registration.html"><img src="imagem/user2.png"> Cadastro de Usuário</a></li>
+                </ul>
+            </div>
+            <button id="logoutButton" class="logout-button">Sair</a></button>
+        </nav>
+        <main class="content">
+            <div class="header">
+                <h1>Cadastro de Motorista</h1>
+            </div>
+            <div class="container-driver">
+                <form id="registrationForm" method="post">
+
+                    <div class="dados">
+                        <span class="form-ajust2">
+                            <label for="name"><img src="imagem/user+.png"> Nome:</label>
+                            <input class="input1" type="text" id="name" name="name" required>
+                        </span>
+
+                        <span class="form-ajust">
+                            <label for="birthdate"><img src="imagem/calendar.png"> Data de Nascimento:</label>
+                            <input class="input2" type="date" id="birthdate" name="birthdate" required><br>
+
+                            <label for="phone"><img src="imagem/phone.png"> Telefone:</label>
+                            <input class="input2" type="tel" id="phone" name="phone" required>
+                        </span>
+
+                        <span class="form-ajust2">
+                            <label for="email"><img src="imagem/email.png"> E-mail:</label>
+                            <input class="input1" type="email" id="email" name="email" required><br>
+                        </span>
+
+                        <span class="form-ajust">
+                            <label for="cpf"><img src="imagem/doc.png"> CPF:</label>
+                            <input class="input2" type="text" id="cpf" name="cpf" required>
+
+                            <label for="cnh"><img src="imagem/license.png"> CNH:</label>
+                            <input class="input2" type="text" id="cnh" name="cnh"><br>
+                        </span>
+
+                        <span class="form-ajust">
+                            <label for="cnh_category"><img src="imagem/category.png"> Categoria CNH:</label>
+                            <select class="select1" id="cnh_category" name="cnh_category">
+                                <option value=""></option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+
+                            </select>
+
+                            <label for="cnh_validity"><img src="imagem/calendar.png"> Validade CNH:</label>
+                            <input class="input2" type="date" id="cnh_validity" name="cnh_validity"><br><br>
+                        </span>
+                    </div>
+
+                    <div class="address">
+                        <span class="form-ajust2">
+                            <label for="cep"><img src="imagem/location.png"> CEP:</label>
+                            <input class="input2" type="text" id="cep" name="cep"><br>
+                            <input class="buttoncep" type="button" value="Buscar" onclick="buscarCep()">
+                        </span>
+                        <span class="form-ajust2">
+                            <label for="address"><img src="imagem/location.png"> Endereço:</label>
+                            <input class="input1" type="text" id="address" name="address"><br>
+                        </span>
+                        <span class="form-ajust">
+                            <label for="address_number"><img src="imagem/location.png"> Número:</label>
+                            <input class="input3" type="text" id="address_number" name="address_number">
+
+                            <label for="complement"><img src="imagem/location.png"> Complemento:</label>
+                            <input class="input2" type="text" id="complement" name="complement"><br>
+                        </span>
+                        <span class="form-ajust">
+                            <label for="neighborhood"><img src="imagem/location.png"> Bairro:</label>
+                            <input class="input2" type="text" id="neighborhood" name="neighborhood">
+
+                            <label for="city"><img src="imagem/location.png"> Cidade:</label>
+                            <input class="input2" type="text" id="city" name="city">
+
+                            <label for="state"><img src="imagem/location.png"> UF:</label>
+                            <input class="input3" type="text" id="state" name="state" maxlength="2"><br>
+                        </span>
+                    </div>
+
+                    <div id="responseMessage"></div>
+
+                    <div class="button-box">
+                        <div class="button-register">
+                            <button id="button-register" type="button" onclick="submitForm()">Cadastrar</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                function submitForm() {
+                    // Obtendo os valores dos campos
+                    var name = $('#name').val();
+                    var birthdate = $('#birthdate').val();
+                    var phone = $('#phone').val();
+                    var email = $('#email').val();
+                    var cpf = $('#cpf').val();
+                    var cnh = $('#cnh').val();
+                    var cnh_category = $('#cnh_category').val();
+                    var cnh_validity = $('#cnh_validity').val();
+                    var cep = $('#cep').val();
+                    var address = $('#address').val();
+                    var address_number = $('#address_number').val();
+                    var complement = $('#complement').val();
+                    var neighborhood = $('#neighborhood').val();
+                    var city = $('#city').val();
+                    var state = $('#state').val();
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'http://localhost/crud.projetoweb/php/gravardriver.php',
+                        data: {
+                            name: name,
+                            birthdate: birthdate,
+                            phone: phone,
+                            email: email,
+                            cpf: cpf,
+                            cnh: cnh,
+                            cnh_category: cnh_category,
+                            cnh_validity: cnh_validity,
+                            cep: cep,
+                            address: address,
+                            address_number: address_number,
+                            complement: complement,
+                            neighborhood: neighborhood,
+                            city: city,
+                            state: state
+                        },
+                        success: function (response) {
+                            $('#responseMessage').html(response);
+                            console.log(response);
+
+                            // Limpar os campos do formulário após sucesso
+                            if (response.includes("Motorista cadastrado com sucesso!!!")) {
+                                $('#registrationForm')[0].reset();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            </script>
+
+            <script>
+                function buscarCep() {
+                    var cep = document.getElementById("cep").value;
+                    var url = "http://viacep.com.br/ws/" + cep + "/json/";
+
+                    var obj = new XMLHttpRequest();
+
+                    obj.open('GET', url, true);
+
+                    obj.onreadystatechange = function () {
+                        if (obj.status == 200) {
+                            var dados = JSON.parse(obj.responseText);
+
+                            document.getElementById("address").value = dados.logradouro;
+                            document.getElementById("neighborhood").value = dados.bairro;
+                            document.getElementById("city").value = dados.localidade;
+                            document.getElementById("state").value = dados.uf;
+                        }
+
+                    }
+                    obj.send();
+                }
+            </script>
+
+
+        </main>
+    </div>
+    <script>
+        fetch('php/verificar_sessao.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    // Redireciona para a página de login se o usuário não estiver autenticado
+                    window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar a sessão:', error);
+            });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Seu código JavaScript existente
+
+            // Adiciona um evento de clique ao botão de logout
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                // Faz uma solicitação ao servidor para encerrar a sessão PHP
+                fetch('php/logout.php', {
+                    method: 'POST',
+                })
+                    .then(function (response) {
+                        // Redireciona para a página de login após logout
+                        window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                    })
+                    .catch(function (error) {
+                        console.error('Erro ao efetuar logout:', error);
+                    });
+            });
+
+            // Seu código JavaScript existente
+        });
+    </script>
+</body>
+<footer>
+    <div class="footer-text">
+        <h4>© Copyright <u>VIX EXPRESS</u> All Rights Reserved</h4>
+        <p>
+        <h5>Designed by DANILO MACEDO.</h5>
+        </p>
+    </div>
+</footer>
+
+</html>

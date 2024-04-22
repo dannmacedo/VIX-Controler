@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/estyle_novo.css">
+
+    <title>VIX - Pagina inícial</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="imagem-logo">
+                <a href="control_panel.html">
+                    <img src="imagem/VIX_logo.png" alt="logo VIX">
+                </a>
+            </div>
+            <div class="list-menu">
+                <ul>
+                    <li><a href="control_panel.html"><img src="imagem/panel.png"> Painel de Controle</a></li>
+                    <li><a href="new_route.html"><img src="imagem/new.png"> Nova Rota</a></li>
+                    <li><a href="driver_registration.html"><img src="imagem/driver.png"> Cadastro de Motorista</a></li>
+                    <li><a href="vehicle_registration.html"><img src="imagem/truck.png"> Cadastro de Veiculo</a></li>
+                    <li><a href="user_registration.html"><img src="imagem/user2.png"> Cadastro de Usuário</a></li>
+                </ul>
+            </div>
+            <button id="logoutButton" class="logout-button">Sair</a></button>
+        </nav>
+        <main class="content">
+            <div class="header">
+                <h1>Painel de Controle</h1>
+            </div>
+            <div class="painel">
+
+                <div class="tabela">
+                    <h1>Relatório de operações</h1><br>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>DataOp</th>
+                                <th>Romaneio</th>
+                                <th>Rota</th>
+                                <th>KM</th>
+                                <th>Placa</th>
+                                <th>Tipo</th>
+                                <th>Motorista</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody"></tbody>
+                    </table>
+
+                </div>
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tableBody = document.getElementById('tableBody');
+
+            function createDeleteButton(id) {
+                var button = document.createElement('button');
+                button.textContent = 'Excluir';
+                button.addEventListener('click', function () {
+                    fetch('php/excluir_operacao.php?id=' + id, {
+                        method: 'DELETE'
+                    })
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            fetchAndDisplayData();
+                        })
+                        .catch(function (error) {
+                            console.log('Erro ao excluir o registro:', error);
+                        });
+                });
+                return button;
+            }
+
+            function fetchAndDisplayData() {
+                fetch('php/buscar_dados_operacao.php')
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        tableBody.innerHTML = ''; // Limpa o conteúdo da tabela
+
+                        if (data.length > 0) {
+                            data.forEach(function (row) {
+                                var tr = document.createElement('tr');
+
+                                Object.keys(row).forEach(function (key) {
+                                    var td = document.createElement('td');
+                                    td.textContent = row[key];
+                                    tr.appendChild(td);
+                                });
+
+                                var deleteButtonCell = document.createElement('td');
+                                var deleteButton = createDeleteButton(row['ID']);
+                                deleteButtonCell.appendChild(deleteButton);
+                                tr.appendChild(deleteButtonCell);
+
+                                tableBody.appendChild(tr);
+                            });
+                        } else {
+                            var tr = document.createElement('tr');
+                            var td = document.createElement('td');
+                            td.setAttribute('colspan', '9');
+                            td.textContent = 'Nenhum dado encontrado';
+                            tr.appendChild(td);
+                            tableBody.appendChild(tr);
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log('Ocorreu um erro ao buscar os dados:', error);
+                    });
+            }
+
+            fetchAndDisplayData();
+        });
+    </script>
+    <script>
+        fetch('php/verificar_sessao.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.authenticated) {
+                    // Redireciona para a página de login se o usuário não estiver autenticado
+                    window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar a sessão:', error);
+            });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Seu código JavaScript existente
+    
+            // Adiciona um evento de clique ao botão de logout
+            document.getElementById('logoutButton').addEventListener('click', function () {
+                // Faz uma solicitação ao servidor para encerrar a sessão PHP
+                fetch('php/logout.php', {
+                    method: 'POST',
+                })
+                .then(function(response) {
+                    // Redireciona para a página de login após logout
+                    window.location.href = 'login.html'; // Altere para o seu arquivo de login
+                })
+                .catch(function(error) {
+                    console.error('Erro ao efetuar logout:', error);
+                });
+            });
+    
+            // Seu código JavaScript existente
+        });
+    </script>
+
+</body>
+<footer>
+    <div class="footer-text">
+        <h4>© Copyright <u>VIX EXPRESS</u> All Rights Reserved</h4>
+        <p>
+        <h5>Designed by DANILO MACEDO.</h5>
+        </p>
+    </div>
+</footer>
+
+</html>
